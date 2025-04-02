@@ -1,114 +1,122 @@
-let currentDate = new Date(); // Aktuální datum
-let selectedDate; // Vybrané datum pro přidání události
-let calendarDays = JSON.parse(localStorage.getItem('calendar') || '{}'); // Načte uložené události nebo vytvoří prázdný objekt
+let currentDate = new Date();
+let selectedDate;
+let calendarDays = JSON.parse(localStorage.getItem('calendar') || '{}');
 
-const currentMonthElement = document.getElementById('currentMonth'); // Prvek pro zobrazení názvu měsíce
-const daysElement = document.getElementById('days'); // Prvek pro zobrazení dnů
-const eventModal = document.getElementById('eventModal'); // Modální okno pro přidání události
-const modalDateElement = document.getElementById('modalDate'); // Prvek pro zobrazení data v modálním okně
-const modalEvents = document.getElementById('modalEvents'); // Prvek pro zobrazení událostí v modálním okně
-const modalEventTimeInput = document.getElementById('modalEventTime'); // Pole pro zadání času události v modálním okně
-const modalEventTextInput = document.getElementById('modalEventText'); // Pole pro zadání textu události v modálním okně
-const modalSaveEventButton = document.getElementById('modalSaveEvent'); // Tlačítko pro uložení události v modálním okně
-const modalCloseButton = eventModal.querySelector('.close'); // Tlačítko pro zavření modálního okna
-const prevMonthButton = document.getElementById('prevMonth'); // Tlačítko pro předchozí měsíc
-const nextMonthButton = document.getElementById('nextMonth'); // Tlačítko pro další měsíc
+const currentMonthElement = document.getElementById('currentMonth');
+const daysElement = document.getElementById('days');
+const eventModal = document.getElementById('eventModal');
+const modalDateElement = document.getElementById('modalDate');
+const modalEvents = document.getElementById('modalEvents');
+const modalEventTimeInput = document.getElementById('modalEventTime');
+const modalEventTextInput = document.getElementById('modalEventText');
+const modalSaveEventButton = document.getElementById('modalSaveEvent');
+const modalCloseButton = eventModal.querySelector('.close');
+const prevMonthButton = document.getElementById('prevMonth');
+const nextMonthButton = document.getElementById('nextMonth');
 
 function renderCalendar() {
-    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1); // První den aktuálního měsíce
-    const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate(); // Počet dní v aktuálním měsíci
-    const startingDay = firstDayOfMonth.getDay(); // Den v týdnu, kterým začíná měsíc
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+    const startingDay = firstDayOfMonth.getDay();
 
-    currentMonthElement.textContent = currentDate.toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' }); // Zobrazí název měsíce
-    daysElement.innerHTML = ''; // Vymaže obsah dnů
+    currentMonthElement.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }); // Anglické názvy měsíců
+    daysElement.innerHTML = '';
 
-    for (let i = 0; i < startingDay; i++) { // Vytvoří prázdné obdélníčky pro dny před prvním dnem měsíce
+    const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; // Anglické názvy dnů
+    weekDays.forEach(day => {
+        const dayElement = document.createElement('div');
+        dayElement.textContent = day;
+        dayElement.classList.add('day');
+        daysElement.appendChild(dayElement);
+    });
+
+    for (let i = 0; i < startingDay; i++) {
         const emptyDay = document.createElement('div');
         daysElement.appendChild(emptyDay);
     }
 
-    for (let i = 1; i <= daysInMonth; i++) { // Vytvoří obdélníčky pro každý den v měsíci
+    for (let i = 1; i <= daysInMonth; i++) {
         const dayElement = document.createElement('div');
-        dayElement.textContent = i.toString(); // Zobrazí číslo dne jako text
-        dayElement.classList.add('day'); // Přidá třídu pro stylování dne
+        dayElement.textContent = i.toString();
+        dayElement.classList.add('day');
 
-        const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i); // Datum pro aktuální den
-        if (calendarDays[dayDate.toISOString().split('T')[0]]) { // Pokud má den událost, přidá třídu has-event
+        const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+        if (calendarDays[dayDate.toISOString().split('T')[0]]) {
             dayElement.classList.add('has-event');
         }
 
-        dayElement.addEventListener('click', () => { // Přidá reakci na kliknutí na den
-            selectedDate = dayDate; // Uloží vybrané datum
-            showModal(); // Zobrazí modální okno
+        dayElement.addEventListener('click', () => {
+            selectedDate = dayDate;
+            showModal();
         });
 
-        daysElement.appendChild(dayElement); // Přidá den do kalendáře
+        daysElement.appendChild(dayElement);
     }
 }
 
 function renderEvents() {
-    modalEvents.innerHTML = ''; // Vymaže události v modálním okně
-    if (selectedDate && calendarDays[selectedDate.toISOString().split('T')[0]]) { // Pokud je vybrané datum a má události
-        const events = calendarDays[selectedDate.toISOString().split('T')[0]]; // Načte události pro vybrané datum
-        events.forEach((event, index) => { // Pro každou událost
-            const eventElement = document.createElement('div'); // Vytvoří prvek pro zobrazení události
-            eventElement.classList.add('event-item'); // Přidá třídu pro stylování události
-            eventElement.innerHTML = `<span>${event.time} - ${event.text}</span> <button data-index="${index}">×</button>`; // Zobrazí čas a text události a tlačítko pro smazání
-            modalEvents.appendChild(eventElement); // Přidá událost do modálního okna
+    modalEvents.innerHTML = '';
+    if (selectedDate && calendarDays[selectedDate.toISOString().split('T')[0]]) {
+        const events = calendarDays[selectedDate.toISOString().split('T')[0]];
+        events.forEach((event, index) => {
+            const eventElement = document.createElement('div');
+            eventElement.classList.add('event-item');
+            eventElement.innerHTML = `<span>${event.time} - ${event.text}</span> <button data-index="${index}">×</button>`;
+            modalEvents.appendChild(eventElement);
         });
     }
 }
 
 function showModal() {
-    modalDateElement.textContent = selectedDate.toLocaleDateString('cs-CZ', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); // Zobrazí datum v modálním okně
-    renderEvents(); // Zobrazí události v modálním okně
-    eventModal.style.display = 'block'; // Zobrazí modální okno
+    modalDateElement.textContent = selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); // Anglické názvy dnů v modálním okně
+    renderEvents();
+    eventModal.style.display = 'flex';
 }
 
 function hideModal() {
-    eventModal.style.display = 'none'; // Skryje modální okno
+    eventModal.style.display = 'none';
 }
 
 function saveEvent() {
-    const time = modalEventTimeInput.value; // Načte čas události z formuláře
-    const text = modalEventTextInput.value; // Načte text události z formuláře
+    const time = modalEventTimeInput.value;
+    const text = modalEventTextInput.value;
 
-    if (time && text) { // Pokud jsou čas i text zadané
-        const dateString = selectedDate.toISOString().split('T')[0]; // Datum ve formátu YYYY-MM-DD
-        if (!calendarDays[dateString]) { // Pokud pro dané datum neexistuje záznam událostí
-            calendarDays[dateString] = []; // Vytvoří prázdné pole pro události
+    if (time && text) {
+        const dateString = selectedDate.toISOString().split('T')[0];
+        if (!calendarDays[dateString]) {
+            calendarDays[dateString] = [];
         }
-        calendarDays[dateString].push({ time, text }); // Přidá událost do pole událostí
-        localStorage.setItem('calendar', JSON.stringify(calendarDays)); // Uloží události do prohlížeče
-        renderEvents(); // Zobrazí události v modálním okně
-        modalEventTimeInput.value = ''; // Vymaže čas z formuláře
-        modalEventTextInput.value = ''; // Vymaže text z formuláře
+        calendarDays[dateString].push({ time, text });
+        localStorage.setItem('calendar', JSON.stringify(calendarDays));
+        renderEvents();
+        modalEventTimeInput.value = '';
+        modalEventTextInput.value = '';
     }
 }
 
 function deleteEvent(index) {
-    const dateString = selectedDate.toISOString().split('T')[0]; // Datum ve formátu YYYY-MM-DD
-    calendarDays[dateString].splice(index, 1); // Odstraní událost z pole událostí
-    localStorage.setItem('calendar', JSON.stringify(calendarDays)); // Uloží události do prohlížeče
-    renderEvents(); // Zobrazí události v modálním okně
+    const dateString = selectedDate.toISOString().split('T')[0];
+    calendarDays[dateString].splice(index, 1);
+    localStorage.setItem('calendar', JSON.stringify(calendarDays));
+    renderEvents();
 }
 
 prevMonthButton.addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() - 1); // Nastaví aktuální datum na předchozí měsíc
-    renderCalendar(); // Aktualizuje kalendář
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    renderCalendar();
 });
 
 nextMonthButton.addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() + 1); // Nastaví aktuální datum na další měsíc
-    renderCalendar(); // Aktualizuje kalendář
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    renderCalendar();
 });
 
-modalSaveEventButton.addEventListener('click', saveEvent); // Přidá reakci na kliknutí na tlačítko pro uložení události
-modalCloseButton.addEventListener('click', hideModal); // Přidá reakci na kliknutí na tlačítko pro zavření modálního okna
-modalEvents.addEventListener('click', (event) => { // Přidá reakci na kliknutí na událost v modálním okně
-    if (event.target.tagName === 'BUTTON') { // Pokud byl kliknutý prvek tlačítko
-        deleteEvent(event.target.dataset.index); // Odstraní událost
+modalSaveEventButton.addEventListener('click', saveEvent);
+modalCloseButton.addEventListener('click', hideModal);
+modalEvents.addEventListener('click', (event) => {
+    if (event.target.tagName === 'BUTTON') {
+        deleteEvent(event.target.dataset.index);
     }
 });
 
-renderCalendar(); // Spustí funkci pro zobrazení kalendáře
+renderCalendar();

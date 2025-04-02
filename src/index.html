@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
 <head>
-    <title>Můj kalendar</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Calendar</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="calendar">
+    <div id="yearHeader"><h2>2025</h2></div>
     <div id="header">
         <button id="prevMonth">&lt;</button>
         <h2 id="currentMonth"></h2>
@@ -18,8 +21,8 @@
         <span class="close">&times;</span>
         <h2 id="modalDate"></h2>
         <div id="modalEvents"></div>
-        <label for="modalEventTime">Čas:</label> <input type="time" id="modalEventTime"><br>
-        <label for="modalEventText">Poznámka:</label> <input type="text" id="modalEventText" placeholder="Notification">
+        <label for="modalEventTime">Time:</label> <input type="time" id="modalEventTime"><br>
+        <label for="modalEventText">Note:</label> <input type="text" id="modalEventText" placeholder="Notification">
         <button id="modalSaveEvent">Save</button>
     </div>
 </div>
