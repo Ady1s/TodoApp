@@ -1,0 +1,79 @@
+#calendar {
+    width: 300px; /* Nastaví šířku kalendáře na 300 pixelů */
+    border: 1px solid #ccc; /* Přidá rámeček kalendáři */
+}
+
+#header {
+    display: flex; /* Použije flexbox pro uspořádání prvků v hlavičce */
+    justify-content: space-between; /* Prvky v hlavičce jsou rozmístěny rovnoměrně */
+    padding: 10px; /* Přidá vnitřní okraje hlavičce */
+}
+
+#days {
+    display: grid; /* Použije grid pro uspořádání dnů v kalendáři */
+    grid-template-columns: repeat(7, 1fr); /* Vytvoří 7 sloupců pro dny v týdnu */
+}
+
+.day {
+    padding: 10px; /* Přidá vnitřní okraje pro každý den */
+    border: 1px solid #eee; /* Přidá rámeček pro každý den */
+    text-align: center; /* Zarovná text na střed v každém dni */
+}
+
+.day.has-event {
+    background-color: #f0f8ff; /* Nastaví barvu pozadí pro dny, které mají událost */
+}
+
+#eventForm {
+    position: absolute; /* Umístí formulář absolutně na stránce */
+    background-color: white; /* Nastaví barvu pozadí formuláře */
+    border: 1px solid #ccc; /* Přidá rámeček formuláři */
+    padding: 10px; /* Přidá vnitřní okraje formuláři */
+}
+
+.modal {
+    position: fixed; /* Umístí modální okno na pevné místo na stránce */
+    z-index: 1; /* Nastaví vrstvu modálního okna */
+    left: 0; /* Umístí modální okno od levého okraje stránky */
+    top: 0; /* Umístí modální okno od horního okraje stránky */
+    width: 100%; /* Nastaví šířku modálního okna na 100% */
+    height: 100%; /* Nastaví výšku modálního okna na 100% */
+    overflow: auto; /* Přidá posuvník, pokud je obsah větší než okno */
+    background-color: rgba(0,0,0,0.4); /* Nastaví barvu pozadí modálního okna s průhledností */
+}
+
+.modal-content {
+    background-color: #fefefe; /* Nastaví barvu pozadí obsahu modálního okna */
+    margin: 15% auto; /* Nastaví vnější okraje obsahu modálního okna */
+    padding: 20px; /* Nastaví vnitřní okraje obsahu modálního okna */
+    border: 1px solid #888; /* Přidá rámeček obsahu modálního okna */
+    width: 80%; /* Nastaví šířku obsahu modálního okna na 80% */
+}
+
+.close {
+    color: #aaa; /* Nastaví barvu textu tlačítka pro zavření modálního okna */
+    float: right; /* Umístí tlačítko pro zavření na pravou stranu */
+    font-size: 28px; /* Nastaví velikost písma tlačítka pro zavření */
+    font-weight: bold; /* Nastaví tloušťku písma tlačítka pro zavření */
+}
+
+.close:hover,
+.close:focus {
+    color: black; /* Nastaví barvu textu tlačítka pro zavření při najetí myší nebo zaostření */
+    text-decoration: none; /* Odstraní podtržení textu tlačítka pro zavření */
+    cursor: pointer; /* Nastaví kurzor myši na ukazatel */
+}
+
+.event-item {
+    display: flex; /* Použije flexbox pro uspořádání prvků v události */
+    justify-content: space-between; /* Prvky v události jsou rozmístěny rovnoměrně */
+    align-items: center; /* Prvky v události jsou zarovnány na střed */
+    padding: 5px 0; /* Přidá vnitřní okraje události */
+    border-bottom: 1px solid #eee; /* Přidá rámeček pod událost */
+}
+
+.event-item button {
+    background-color: transparent; /* Nastaví barvu pozadí tlačítka na průhlednou */
+    border: none; /* Odstraní rámeček tlačítka */
+    cursor: pointer; /* Nastaví kurzor myši na ukazatel */
+}
