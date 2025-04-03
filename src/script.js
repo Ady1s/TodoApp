@@ -19,10 +19,10 @@ function renderCalendar() {
     const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
     const startingDay = firstDayOfMonth.getDay();
 
-    currentMonthElement.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }); // Anglické názvy měsíců
+    currentMonthElement.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
     daysElement.innerHTML = '';
 
-    const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; // Anglické názvy dnů
+    const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     weekDays.forEach(day => {
         const dayElement = document.createElement('div');
         dayElement.textContent = day;
@@ -41,9 +41,7 @@ function renderCalendar() {
         dayElement.classList.add('day');
 
         const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
-        if (calendarDays[dayDate.toISOString().split('T')[0]]) {
-            dayElement.classList.add('has-event');
-        }
+        updateDayElement(dayElement, dayDate);
 
         dayElement.addEventListener('click', () => {
             selectedDate = dayDate;
@@ -51,6 +49,15 @@ function renderCalendar() {
         });
 
         daysElement.appendChild(dayElement);
+    }
+}
+
+function updateDayElement(dayElement, date) {
+    const dateString = date.toISOString().split('T')[0];
+    if (calendarDays[dateString] && calendarDays[dateString].length > 0) {
+        dayElement.classList.add('has-event');
+    } else {
+        dayElement.classList.remove('has-event');
     }
 }
 
@@ -68,7 +75,7 @@ function renderEvents() {
 }
 
 function showModal() {
-    modalDateElement.textContent = selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); // Anglické názvy dnů v modálním okně
+    modalDateElement.textContent = selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     renderEvents();
     eventModal.style.display = 'flex';
 }
@@ -89,6 +96,7 @@ function saveEvent() {
         calendarDays[dateString].push({ time, text });
         localStorage.setItem('calendar', JSON.stringify(calendarDays));
         renderEvents();
+        updateDayElement(document.querySelector(`.day:nth-child(${selectedDate.getDate() + getStartingDay() + 7})`), selectedDate);
         modalEventTimeInput.value = '';
         modalEventTextInput.value = '';
     }
@@ -99,6 +107,11 @@ function deleteEvent(index) {
     calendarDays[dateString].splice(index, 1);
     localStorage.setItem('calendar', JSON.stringify(calendarDays));
     renderEvents();
+    updateDayElement(document.querySelector(`.day:nth-child(${selectedDate.getDate() + getStartingDay() + 7})`), selectedDate);
+}
+
+function getStartingDay() {
+    return new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
 }
 
 prevMonthButton.addEventListener('click', () => {

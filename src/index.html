@@ -8,7 +8,6 @@
 </head>
 <body>
 <div id="calendar">
-    <div id="yearHeader"><h2>2025</h2></div>
     <div id="header">
         <button id="prevMonth">&lt;</button>
         <h2 id="currentMonth"></h2>
@@ -16,14 +15,20 @@
     </div>
     <div id="days"></div>
 </div>
-<div id="eventModal" class="modal" style="display: none;">
+<div id="eventModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2 id="modalDate"></h2>
         <div id="modalEvents"></div>
-        <label for="modalEventTime">Time:</label> <input type="time" id="modalEventTime"><br>
-        <label for="modalEventText">Note:</label> <input type="text" id="modalEventText" placeholder="Notification">
-        <button id="modalSaveEvent">Save</button>
+        <div class="modal-input">
+            <label for="modalEventTime">Time:</label>
+            <input type="time" id="modalEventTime">
+        </div>
+        <div class="modal-input">
+            <label for="modalEventText">Note:</label>
+            <input type="text" id="modalEventText" placeholder="Notification">
+        </div>
+        <button id="modalSaveEvent" class="modal-save-button">Save</button>
     </div>
 </div>
 <script src="script.js"></script>
