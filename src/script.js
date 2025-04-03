@@ -13,6 +13,7 @@ const modalSaveEventButton = document.getElementById('modalSaveEvent');
 const modalCloseButton = eventModal.querySelector('.close');
 const prevMonthButton = document.getElementById('prevMonth');
 const nextMonthButton = document.getElementById('nextMonth');
+const upcomingEventsList = document.getElementById('upcomingEventsList');
 
 function renderCalendar() {
     const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -100,6 +101,7 @@ function saveEvent() {
         modalEventTimeInput.value = '';
         modalEventTextInput.value = '';
     }
+    renderUpcomingEvents(); // Aktualizujeme seznam událostí
 }
 
 function deleteEvent(index) {
@@ -108,20 +110,59 @@ function deleteEvent(index) {
     localStorage.setItem('calendar', JSON.stringify(calendarDays));
     renderEvents();
     updateDayElement(document.querySelector(`.day:nth-child(${selectedDate.getDate() + getStartingDay() + 7})`), selectedDate);
+    renderUpcomingEvents(); // Aktualizujeme seznam událostí
 }
 
 function getStartingDay() {
     return new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
 }
 
+function renderUpcomingEvents() {
+    upcomingEventsList.innerHTML = '';
+    const today = new Date().toISOString().split('T')[0];
+    const upcoming = Object.keys(calendarDays)
+        .filter(date => date >= today)
+        .sort(); // Odstranili jsme .slice(0, 5), abychom zobrazili všechny události
+
+    upcoming.forEach(date => {
+        const events = calendarDays[date];
+        events.forEach((event, index) => {
+            const eventElement = document.createElement('div');
+            eventElement.classList.add('upcoming-event-item');
+            eventElement.innerHTML = `<span><strong>${date}</strong>: ${event.time} - ${event.text}</span> <button data-date="${date}" data-index="${index}">×</button>`;
+            upcomingEventsList.appendChild(eventElement);
+        });
+    });
+}
+
+upcomingEventsList.addEventListener('click', (event) => {
+    if (event.target.tagName === 'BUTTON') {
+        const date = event.target.dataset.date;
+        const index = parseInt(event.target.dataset.index);
+        deleteEventFromUpcoming(date, index);
+    }
+});
+
+function deleteEventFromUpcoming(date, index) {
+    calendarDays[date].splice(index, 1);
+    if (calendarDays[date].length === 0) {
+        delete calendarDays[date];
+    }
+    localStorage.setItem('calendar', JSON.stringify(calendarDays));
+    renderUpcomingEvents();
+    renderCalendar(); // Aktualizujeme kalendář
+}
+
 prevMonthButton.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
     renderCalendar();
+    renderUpcomingEvents(); // Aktualizujeme seznam událostí
 });
 
 nextMonthButton.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() + 1);
     renderCalendar();
+    renderUpcomingEvents(); // Aktualizujeme seznam událostí
 });
 
 modalSaveEventButton.addEventListener('click', saveEvent);
@@ -133,3 +174,4 @@ modalEvents.addEventListener('click', (event) => {
 });
 
 renderCalendar();
+renderUpcomingEvents();

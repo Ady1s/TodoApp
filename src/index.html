@@ -7,14 +7,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="calendar">
-    <div id="header">
-        <button id="prevMonth">&lt;</button>
-        <h2 id="currentMonth"></h2>
-        <button id="nextMonth">&gt;</button>
+<div class="container">
+    <div id="calendar">
+        <div id="header">
+            <button id="prevMonth">&lt;</button>
+            <h2 id="currentMonth"></h2>
+            <button id="nextMonth">&gt;</button>
+        </div>
+        <div id="days"></div>
     </div>
-    <div id="days"></div>
+    <div id="upcomingEvents">
+        <h2>Upcoming Events</h2>
+        <div id="upcomingEventsList"></div>
+    </div>
 </div>
+
 <div id="eventModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
