@@ -1,6 +1,7 @@
 let currentDate = new Date();
 let selectedDate;
 let calendarDays = JSON.parse(localStorage.getItem('calendar') || '{}');
+let editingIndex = null; // Přidáno pro sledování upravované události
 
 const currentMonthElement = document.getElementById('currentMonth');
 const daysElement = document.getElementById('days');
@@ -69,7 +70,7 @@ function renderEvents() {
         events.forEach((event, index) => {
             const eventElement = document.createElement('div');
             eventElement.classList.add('event-item');
-            eventElement.innerHTML = `<span>${event.time} - ${event.text}</span> <button data-index="${index}">×</button>`;
+            eventElement.innerHTML = `<span>${event.time} - ${event.text}</span> <button data-index="${index}">×</button> <button data-edit="${index}">✎</button>`; // Přidáno tlačítko pro úpravu
             modalEvents.appendChild(eventElement);
         });
     }
@@ -79,6 +80,9 @@ function showModal() {
     modalDateElement.textContent = selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     renderEvents();
     eventModal.style.display = 'flex';
+    editingIndex = null; // Resetujeme upravovaný index
+    modalEventTimeInput.value = '';
+    modalEventTextInput.value = '';
 }
 
 function hideModal() {
@@ -94,14 +98,19 @@ function saveEvent() {
         if (!calendarDays[dateString]) {
             calendarDays[dateString] = [];
         }
-        calendarDays[dateString].push({ time, text });
+        if (editingIndex !== null) {
+            calendarDays[dateString][editingIndex] = { time, text }; // Upravujeme existující událost
+        } else {
+            calendarDays[dateString].push({ time, text }); // Přidáváme novou událost
+        }
         localStorage.setItem('calendar', JSON.stringify(calendarDays));
         renderEvents();
         updateDayElement(document.querySelector(`.day:nth-child(${selectedDate.getDate() + getStartingDay() + 7})`), selectedDate);
         modalEventTimeInput.value = '';
         modalEventTextInput.value = '';
+        editingIndex = null; // Resetujeme upravovaný index
     }
-    renderUpcomingEvents(); // Aktualizujeme seznam událostí
+    renderUpcomingEvents();
 }
 
 function deleteEvent(index) {
@@ -110,7 +119,7 @@ function deleteEvent(index) {
     localStorage.setItem('calendar', JSON.stringify(calendarDays));
     renderEvents();
     updateDayElement(document.querySelector(`.day:nth-child(${selectedDate.getDate() + getStartingDay() + 7})`), selectedDate);
-    renderUpcomingEvents(); // Aktualizujeme seznam událostí
+    renderUpcomingEvents();
 }
 
 function getStartingDay() {
@@ -122,7 +131,7 @@ function renderUpcomingEvents() {
     const today = new Date().toISOString().split('T')[0];
     const upcoming = Object.keys(calendarDays)
         .filter(date => date >= today)
-        .sort(); // Odstranili jsme .slice(0, 5), abychom zobrazili všechny události
+        .sort();
 
     upcoming.forEach(date => {
         const events = calendarDays[date];
@@ -150,26 +159,50 @@ function deleteEventFromUpcoming(date, index) {
     }
     localStorage.setItem('calendar', JSON.stringify(calendarDays));
     renderUpcomingEvents();
-    renderCalendar(); // Aktualizujeme kalendář
+    renderCalendar();
 }
 
 prevMonthButton.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
     renderCalendar();
-    renderUpcomingEvents(); // Aktualizujeme seznam událostí
+    renderUpcomingEvents();
 });
 
 nextMonthButton.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() + 1);
     renderCalendar();
-    renderUpcomingEvents(); // Aktualizujeme seznam událostí
+    renderUpcomingEvents();
 });
 
 modalSaveEventButton.addEventListener('click', saveEvent);
 modalCloseButton.addEventListener('click', hideModal);
 modalEvents.addEventListener('click', (event) => {
     if (event.target.tagName === 'BUTTON') {
-        deleteEvent(event.target.dataset.index);
+        if (event.target.dataset.index) {
+            deleteEvent(event.target.dataset.index);
+        } else if (event.target.dataset.edit) {
+            editingIndex = parseInt(event.target.dataset.edit);
+            const dateString = selectedDate.toISOString().split('T')[0];
+            const eventData = calendarDays[dateString][editingIndex];
+            modalEventTimeInput.value = eventData.time;
+            modalEventTextInput.value = eventData.text;
+        }
+    }
+});
+
+modalEventTimeInput.addEventListener('focus', () => {
+    modalEventTimeInput.type = 'text'; // Umožňuje ruční zadání času
+});
+
+modalEventTimeInput.addEventListener('blur', () => {
+    if (!modalEventTimeInput.value) {
+        modalEventTimeInput.type = 'text'; // Udržuje typ jako text
+    }
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        hideModal();
     }
 });
 
