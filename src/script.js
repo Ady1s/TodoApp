@@ -80,7 +80,7 @@ function renderEvents() {
         events.forEach((event, index) => {
             const eventElement = document.createElement('div');
             eventElement.classList.add('event-item');
-            eventElement.innerHTML = `<span style="color: ${event.color};">${event.icon === 'none' ? '' : document.querySelector(`#modalEventIcon option[value="${event.icon}"]`).innerHTML} ${event.time} - ${event.text} (${event.repeat})</span> <button data-index="${index}">×</button> <button data-edit="${index}">✎</button>`;
+            eventElement.innerHTML = `<span style="color: ${event.color};">${event.icon === 'none' ? '' : event.icon + ': '} ${event.time} - ${event.text} (${event.repeat})</span> <button data-index="${index}">×</button> <button data-edit="${index}">✎</button>`;
             modalEvents.appendChild(eventElement);
         });
     }
@@ -157,7 +157,7 @@ function renderUpcomingEvents() {
         events.forEach((event, index) => {
             const eventElement = document.createElement('div');
             eventElement.classList.add('upcoming-event-item');
-            eventElement.innerHTML = `<span style="color: ${event.color};">${event.icon === 'none' ? '' : document.querySelector(`#modalEventIcon option[value="${event.icon}"]`).innerHTML} <strong>${date}</strong>: ${event.time} - ${event.text}</span> <button data-date="${date}" data-index="${index}">×</button>`;
+            eventElement.innerHTML = `<span style="color: ${event.color};">${event.icon === 'none' ? '' : event.icon + ': '} <strong>${date}</strong>: ${event.time} - ${event.text}</span> <button data-date="${date}" data-index="${index}">×</button>`;
             if (date === today) {
                 eventElement.style.backgroundColor = "#fff3cd";
             }
@@ -172,7 +172,7 @@ function renderDailyEvents() {
         const events = calendarDays[selectedDate.toISOString().split('T')[0]];
         events.forEach((event) => {
             const eventElement = document.createElement('div');
-            eventElement.innerHTML = `<span style="color: ${event.color};">${event.icon === 'none' ? '' : document.querySelector(`#modalEventIcon option[value="${event.icon}"]`).innerHTML} ${event.time} - ${event.text}</span>`;
+            eventElement.innerHTML = `<span style="color: ${event.color};">${event.icon === 'none' ? '' : event.icon + ': '} ${event.time} - ${event.text}</span>`;
             dailyEventsList.appendChild(eventElement);
         });
     }
