@@ -5,9 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Calendar</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
 <div class="container">
+    <div id="dailyEvents">
+        <h2>Daily Events</h2>
+        <div id="dailyEventsList"></div>
+    </div>
     <div id="calendar">
         <div id="header">
             <button id="prevMonth">&lt;</button>
@@ -29,11 +34,34 @@
         <div id="modalEvents"></div>
         <div class="modal-input">
             <label for="modalEventTime">Time:</label>
-            <input type="text" id="modalEventTime" placeholder="HH:MM">
+            <input type="time" id="modalEventTime">
         </div>
         <div class="modal-input">
             <label for="modalEventText">Note:</label>
             <input type="text" id="modalEventText" placeholder="Notification">
+        </div>
+        <div class="modal-input">
+            <label for="modalEventColor">Color:</label>
+            <input type="color" id="modalEventColor">
+        </div>
+        <div class="modal-input">
+            <label for="modalEventIcon">Icon:</label>
+            <select id="modalEventIcon">
+                <option value="none">None</option>
+                <option value="birthday"><i class="fas fa-birthday-cake"></i> Birthday</option>
+                <option value="work"><i class="fas fa-briefcase"></i> Work</option>
+                <option value="meeting"><i class="fas fa-users"></i> Meeting</option>
+                <option value="home"><i class="fas fa-home"></i> Home</option>
+            </select>
+        </div>
+        <div class="modal-input">
+            <label for="modalEventRepeat">Repeat:</label>
+            <select id="modalEventRepeat">
+                <option value="once">Once</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
         </div>
         <button id="modalSaveEvent" class="modal-save-button">Save</button>
     </div>

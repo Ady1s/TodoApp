@@ -1,7 +1,7 @@
 let currentDate = new Date();
 let selectedDate;
 let calendarDays = JSON.parse(localStorage.getItem('calendar') || '{}');
-let editingIndex = null; // Přidáno pro sledování upravované události
+let editingIndex = null;
 
 const currentMonthElement = document.getElementById('currentMonth');
 const daysElement = document.getElementById('days');
@@ -10,16 +10,21 @@ const modalDateElement = document.getElementById('modalDate');
 const modalEvents = document.getElementById('modalEvents');
 const modalEventTimeInput = document.getElementById('modalEventTime');
 const modalEventTextInput = document.getElementById('modalEventText');
+const modalEventColorInput = document.getElementById('modalEventColor');
+const modalEventRepeatInput = document.getElementById('modalEventRepeat');
+const modalEventIconInput = document.getElementById('modalEventIcon');
 const modalSaveEventButton = document.getElementById('modalSaveEvent');
 const modalCloseButton = eventModal.querySelector('.close');
 const prevMonthButton = document.getElementById('prevMonth');
 const nextMonthButton = document.getElementById('nextMonth');
 const upcomingEventsList = document.getElementById('upcomingEventsList');
+const dailyEventsList = document.getElementById('dailyEventsList');
 
 function renderCalendar() {
     const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-    const startingDay = firstDayOfMonth.getDay();
+    const startingDay = firstDayOfMonth.getDay() === 0 ? 6 : firstDayOfMonth.getDay() - 1;
+    const today = new Date().toISOString().split('T')[0];
 
     currentMonthElement.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
     daysElement.innerHTML = '';
@@ -45,9 +50,14 @@ function renderCalendar() {
         const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
         updateDayElement(dayElement, dayDate);
 
+        if (dayDate.toISOString().split('T')[0] === today) {
+            dayElement.classList.add('today');
+        }
+
         dayElement.addEventListener('click', () => {
             selectedDate = dayDate;
             showModal();
+            renderDailyEvents();
         });
 
         daysElement.appendChild(dayElement);
@@ -70,7 +80,7 @@ function renderEvents() {
         events.forEach((event, index) => {
             const eventElement = document.createElement('div');
             eventElement.classList.add('event-item');
-            eventElement.innerHTML = `<span>${event.time} - ${event.text}</span> <button data-index="${index}">×</button> <button data-edit="${index}">✎</button>`; // Přidáno tlačítko pro úpravu
+            eventElement.innerHTML = `<span style="color: ${event.color};">${event.icon === 'none' ? '' : document.querySelector(`#modalEventIcon option[value="${event.icon}"]`).innerHTML} ${event.time} - ${event.text} (${event.repeat})</span> <button data-index="${index}">×</button> <button data-edit="${index}">✎</button>`;
             modalEvents.appendChild(eventElement);
         });
     }
@@ -80,9 +90,12 @@ function showModal() {
     modalDateElement.textContent = selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     renderEvents();
     eventModal.style.display = 'flex';
-    editingIndex = null; // Resetujeme upravovaný index
+    editingIndex = null;
     modalEventTimeInput.value = '';
     modalEventTextInput.value = '';
+    modalEventColorInput.value = '#000000';
+    modalEventRepeatInput.value = 'once';
+    modalEventIconInput.value = 'none';
 }
 
 function hideModal() {
@@ -92,6 +105,9 @@ function hideModal() {
 function saveEvent() {
     const time = modalEventTimeInput.value;
     const text = modalEventTextInput.value;
+    const color = modalEventColorInput.value;
+    const repeat = modalEventRepeatInput.value;
+    const icon = modalEventIconInput.value;
 
     if (time && text) {
         const dateString = selectedDate.toISOString().split('T')[0];
@@ -99,16 +115,19 @@ function saveEvent() {
             calendarDays[dateString] = [];
         }
         if (editingIndex !== null) {
-            calendarDays[dateString][editingIndex] = { time, text }; // Upravujeme existující událost
+            calendarDays[dateString][editingIndex] = { time, text, color, repeat, icon };
         } else {
-            calendarDays[dateString].push({ time, text }); // Přidáváme novou událost
+            calendarDays[dateString].push({ time, text, color, repeat, icon });
         }
         localStorage.setItem('calendar', JSON.stringify(calendarDays));
         renderEvents();
         updateDayElement(document.querySelector(`.day:nth-child(${selectedDate.getDate() + getStartingDay() + 7})`), selectedDate);
         modalEventTimeInput.value = '';
         modalEventTextInput.value = '';
-        editingIndex = null; // Resetujeme upravovaný index
+        modalEventColorInput.value = '#000000';
+        modalEventRepeatInput.value = 'once';
+        modalEventIconInput.value = 'none';
+        editingIndex = null;
     }
     renderUpcomingEvents();
 }
@@ -123,7 +142,7 @@ function deleteEvent(index) {
 }
 
 function getStartingDay() {
-    return new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
+    return new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay() === 0 ? 6 : new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay() - 1;
 }
 
 function renderUpcomingEvents() {
@@ -138,10 +157,25 @@ function renderUpcomingEvents() {
         events.forEach((event, index) => {
             const eventElement = document.createElement('div');
             eventElement.classList.add('upcoming-event-item');
-            eventElement.innerHTML = `<span><strong>${date}</strong>: ${event.time} - ${event.text}</span> <button data-date="${date}" data-index="${index}">×</button>`;
+            eventElement.innerHTML = `<span style="color: ${event.color};">${event.icon === 'none' ? '' : document.querySelector(`#modalEventIcon option[value="${event.icon}"]`).innerHTML} <strong>${date}</strong>: ${event.time} - ${event.text}</span> <button data-date="${date}" data-index="${index}">×</button>`;
+            if (date === today) {
+                eventElement.style.backgroundColor = "#fff3cd";
+            }
             upcomingEventsList.appendChild(eventElement);
         });
     });
+}
+
+function renderDailyEvents() {
+    dailyEventsList.innerHTML = '';
+    if (selectedDate && calendarDays[selectedDate.toISOString().split('T')[0]]) {
+        const events = calendarDays[selectedDate.toISOString().split('T')[0]];
+        events.forEach((event) => {
+            const eventElement = document.createElement('div');
+            eventElement.innerHTML = `<span style="color: ${event.color};">${event.icon === 'none' ? '' : document.querySelector(`#modalEventIcon option[value="${event.icon}"]`).innerHTML} ${event.time} - ${event.text}</span>`;
+            dailyEventsList.appendChild(eventElement);
+        });
+    }
 }
 
 upcomingEventsList.addEventListener('click', (event) => {
@@ -186,17 +220,10 @@ modalEvents.addEventListener('click', (event) => {
             const eventData = calendarDays[dateString][editingIndex];
             modalEventTimeInput.value = eventData.time;
             modalEventTextInput.value = eventData.text;
+            modalEventColorInput.value = eventData.color;
+            modalEventRepeatInput.value = eventData.repeat;
+            modalEventIconInput.value = eventData.icon;
         }
-    }
-});
-
-modalEventTimeInput.addEventListener('focus', () => {
-    modalEventTimeInput.type = 'text'; // Umožňuje ruční zadání času
-});
-
-modalEventTimeInput.addEventListener('blur', () => {
-    if (!modalEventTimeInput.value) {
-        modalEventTimeInput.type = 'text'; // Udržuje typ jako text
     }
 });
 
