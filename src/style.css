@@ -1,220 +1,220 @@
 body {
-    font-family: sans-serif;
-    margin: 0;
-    background-color: #f4f4f4;
+    font-family: sans-serif; /* Nastavení písma pro celý dokument */
+    margin: 0; /* Odstranění okrajů kolem těla dokumentu */
+    background-color: #f4f4f4; /* Nastavení barvy pozadí dokumentu */
 }
 
 .container {
-    display: flex;
-    justify-content: center;
-    padding-top: 20px;
+    display: flex; /* Nastavení flexboxu pro rozložení prvků */
+    justify-content: center; /* Vycentrování prvků v kontejneru */
+    padding-top: 20px; /* Přidání horního odsazení kontejneru */
 }
 
 #calendar {
-    width: 40%;
-    max-width: 600px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    overflow: hidden;
-    margin-bottom: 20px;
+    width: 40%; /* Nastavení šířky kalendáře */
+    max-width: 600px; /* Nastavení maximální šířky kalendáře */
+    border: 1px solid #ddd; /* Přidání ohraničení kalendáře */
+    border-radius: 10px; /* Zaoblení rohů kalendáře */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Přidání stínu kalendáře */
+    background-color: white; /* Nastavení barvy pozadí kalendáře */
+    overflow: hidden; /* Skrytí obsahu, který přesahuje rozměry kalendáře */
+    margin-bottom: 20px; /* Přidání dolního odsazení kalendáře */
 }
 
 #dailyEvents {
-    width: 20%;
-    max-width: 300px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    padding: 20px;
-    margin-right: 20px;
+    width: 20%; /* Nastavení šířky denních událostí */
+    max-width: 300px; /* Nastavení maximální šířky denních událostí */
+    border: 1px solid #ddd; /* Přidání ohraničení denních událostí */
+    border-radius: 10px; /* Zaoblení rohů denních událostí */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Přidání stínu denních událostí */
+    background-color: white; /* Nastavení barvy pozadí denních událostí */
+    padding: 20px; /* Přidání odsazení denních událostí */
+    margin-right: 20px; /* Přidání pravého odsazení denních událostí */
 }
 
 #dailyEvents h2 {
-    text-align: center;
-    margin-bottom: 15px;
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
+    text-align: center; /* Vycentrování textu nadpisu denních událostí */
+    margin-bottom: 15px; /* Přidání dolního odsazení nadpisu denních událostí */
+    background-color: #007bff; /* Nastavení barvy pozadí nadpisu denních událostí */
+    color: white; /* Nastavení barvy textu nadpisu denních událostí */
+    padding: 10px; /* Přidání odsazení nadpisu denních událostí */
+    border-radius: 5px; /* Zaoblení rohů nadpisu denních událostí */
 }
 
 #dailyEventsList {
-    padding: 10px;
-    font-family: 'Arial', sans-serif;
-    font-size: 1.1em;
+    padding: 10px; /* Přidání odsazení seznamu denních událostí */
+    font-family: 'Arial', sans-serif; /* Nastavení písma seznamu denních událostí */
+    font-size: 1.1em; /* Nastavení velikosti písma seznamu denních událostí */
 }
 
 #header {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px;
-    background-color: #007bff;
-    color: white;
+    display: flex; /* Nastavení flexboxu pro hlavičku kalendáře */
+    justify-content: space-between; /* Rozložení prvků v hlavičce rovnoměrně */
+    padding: 15px; /* Přidání odsazení hlavičky kalendáře */
+    background-color: #007bff; /* Nastavení barvy pozadí hlavičky kalendáře */
+    color: white; /* Nastavení barvy textu hlavičky kalendáře */
 }
 
 #header button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.2em;
-    cursor: pointer;
+    background: none; /* Odstranění pozadí tlačítek v hlavičce */
+    border: none; /* Odstranění ohraničení tlačítek v hlavičce */
+    color: white; /* Nastavení barvy textu tlačítek v hlavičce */
+    font-size: 1.2em; /* Nastavení velikosti písma tlačítek v hlavičce */
+    cursor: pointer; /* Nastavení kurzoru na ukazatel při najetí na tlačítka */
 }
 
 #days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    display: grid; /* Nastavení mřížky pro dny v kalendáři */
+    grid-template-columns: repeat(7, 1fr); /* Nastavení 7 sloupců s rovnoměrnou šířkou */
 }
 
 .day {
-    padding: 15px;
-    text-align: center;
-    border: 1px solid #eee;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    padding: 15px; /* Přidání odsazení dnů v kalendáři */
+    text-align: center; /* Vycentrování textu dnů v kalendáři */
+    border: 1px solid #eee; /* Přidání ohraničení dnů v kalendáři */
+    cursor: pointer; /* Nastavení kurzoru na ukazatel při najetí na dny */
+    transition: background-color 0.3s; /* Přidání animace pro změnu barvy pozadí dnů */
 }
 
 .day:hover {
-    background-color: #f0f0f0;
+    background-color: #f0f0f0; /* Nastavení barvy pozadí dnů při najetí myší */
 }
 
 .day.has-event {
-    background-color: #e0f7fa;
+    background-color: #e0f7fa; /* Nastavení barvy pozadí dnů s událostmi */
 }
 
 .today {
-    background-color: #fff3cd;
+    background-color: #fff3cd; /* Nastavení barvy pozadí dnešního dne */
 }
 
 #upcomingEvents {
-    width: 20%;
-    max-width: 300px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    padding: 20px;
-    margin-left: 20px;
+    width: 20%; /* Nastavení šířky nadcházejících událostí */
+    max-width: 300px; /* Nastavení maximální šířky nadcházejících událostí */
+    border: 1px solid #ddd; /* Přidání ohraničení nadcházejících událostí */
+    border-radius: 10px; /* Zaoblení rohů nadcházejících událostí */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Přidání stínu nadcházejících událostí */
+    background-color: white; /* Nastavení barvy pozadí nadcházejících událostí */
+    padding: 20px; /* Přidání odsazení nadcházejících událostí */
+    margin-left: 20px; /* Přidání levého odsazení nadcházejících událostí */
 }
 
 #upcomingEvents h2 {
-    text-align: center;
-    margin-bottom: 15px;
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
+    text-align: center; /* Vycentrování textu nadpisu nadcházejících událostí */
+    margin-bottom: 15px; /* Přidání dolního odsazení nadpisu nadcházejících událostí */
+    background-color: #007bff; /* Nastavení barvy pozadí nadpisu nadcházejících událostí */
+    color: white; /* Nastavení barvy textu nadpisu nadcházejících událostí */
+    padding: 10px; /* Přidání odsazení nadpisu nadcházejících událostí */
+    border-radius: 5px; /* Zaoblení rohů nadpisu nadcházejících událostí */
 }
 
 #upcomingEventsList {
-    padding: 10px;
-    font-family: 'Arial', sans-serif;
-    font-size: 1.1em;
+    padding: 10px; /* Přidání odsazení seznamu nadcházejících událostí */
+    font-family: 'Arial', sans-serif; /* Nastavení písma seznamu nadcházejících událostí */
+    font-size: 1.1em; /* Nastavení velikosti písma seznamu nadcházejících událostí */
 }
 
 .upcoming-event-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
+    display: flex; /* Nastavení flexboxu pro položky nadcházejících událostí */
+    justify-content: space-between; /* Rozložení prvků v položkách rovnoměrně */
+    align-items: center; /* Vycentrování prvků v položkách vertikálně */
+    padding: 8px 0; /* Přidání horního a dolního odsazení položek */
+    border-bottom: 1px solid #eee; /* Přidání dolního ohraničení položek */
 }
 
 .upcoming-event-item button {
-    background: none;
-    border: none;
-    color: #d32f2f;
-    cursor: pointer;
+    background: none; /* Odstranění pozadí tlačítek v položkách */
+    border: none; /* Odstranění ohraničení tlačítek v položkách */
+    color: #d32f2f; /* Nastavení barvy textu tlačítek v položkách */
+    cursor: pointer; /* Nastavení kurzoru na ukazatel při najetí na tlačítka */
 }
 
 .modal {
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: none;
-    justify-content: center;
-    align-items: center;
+    position: fixed; /* Nastavení pozice modálního okna na pevně danou */
+    z-index: 1; /* Nastavení indexu z-index modálního okna */
+    left: 0; /* Nastavení levého okraje modálního okna na 0 */
+    top: 0; /* Nastavení horního okraje modálního okna na 0 */
+    width: 100%; /* Nastavení šířky modálního okna na 100% */
+    height: 100%; /* Nastavení výšky modálního okna na 100% */
+    overflow: auto; /* Přidání posuvníku, pokud obsah přesahuje rozměry modálního okna */
+    background-color: rgba(0, 0, 0, 0.4); /* Nastavení barvy pozadí modálního okna s průhledností */
+    display: none; /* Skrytí modálního okna */
+    justify-content: center; /* Vycentrování obsahu modálního okna horizontálně */
+    align-items: center; /* Vycentrování obsahu modálního okna vertikálně */
 }
 
 .modal-content {
-    background-color: white;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: white; /* Nastavení barvy pozadí obsahu modálního okna */
+    margin: 15% auto; /* Nastavení okrajů obsahu modálního okna */
+    padding: 20px; /* Přidání odsazení obsahu modálního okna */
+    border: 1px solid #888; /* Přidání ohraničení obsahu modálního okna */
+    width: 80%; /* Nastavení šířky obsahu modálního okna */
+    max-width: 500px; /* Nastavení maximální šířky obsahu modálního okna */
+    border-radius: 8px; /* Zaoblení rohů obsahu modálního okna */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Přidání stínu obsahu modálního okna */
 }
 
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
+    color: #aaa; /* Nastavení barvy textu tlačítka pro zavření modálního okna */
+    float: right; /* Nastavení pozice tlačítka pro zavření na pravou stranu */
+    font-size: 28px; /* Nastavení velikosti písma tlačítka pro zavření */
+    font-weight: bold; /* Nastavení tučnosti písma tlačítka pro zavření */
+    cursor: pointer; /* Nastavení kurzoru na ukazatel při najetí na tlačítko */
 }
 
 .close:hover,
 .close:focus {
-    color: black;
-    text-decoration: none;
+    color: black; /* Nastavení barvy textu tlačítka pro zavření při najetí myší nebo fokusování */
+    text-decoration: none; /* Odstranění podtržení tlačítka pro zavření */
 }
 
 .event-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
+    display: flex; /* Nastavení flexboxu pro položky událostí v modálním okně */
+    justify-content: space-between; /* Rozložení prvků v položkách rovnoměrně */
+    align-items: center; /* Vycentrování prvků v položkách vertikálně */
+    padding: 10px 0; /* Přidání horního a dolního odsazení položek */
+    border-bottom: 1px solid #eee; /* Přidání dolního ohraničení položek */
 }
 
 .event-item button {
-    background: none;
-    border: none;
-    color: #d32f2f;
-    cursor: pointer;
+    background: none; /* Odstranění pozadí tlačítek v položkách */
+    border: none; /* Odstranění ohraničení tlačítek v položkách */
+    color: #d32f2f; /* Nastavení barvy textu tlačítek v položkách */
+    cursor: pointer; /* Nastavení kurzoru na ukazatel při najetí na tlačítka */
 }
 
 .modal-input {
-    margin-bottom: 15px;
+    margin-bottom: 15px; /* Přidání dolního odsazení vstupů v modálním okně */
 }
 
 .modal-input label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+    display: block; /* Nastavení popisků vstupů jako blokové prvky */
+    margin-bottom: 5px; /* Přidání dolního odsazení popisků vstupů */
+    font-weight: bold; /* Nastavení tučnosti písma popisků vstupů */
 }
 
 .modal-input input[type="time"],
 .modal-input input[type="text"],
 .modal-input input[type="color"],
 .modal-input select {
-    width: calc(100% - 12px);
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 1em;
+    width: calc(100% - 12px); /* Nastavení šířky vstupů */
+    padding: 10px; /* Přidání odsazení vstupů */
+    border: 1px solid #ddd; /* Přidání ohraničení vstupů */
+    border-radius: 4px; /* Zaoblení rohů vstupů */
+    box-sizing: border-box; /* Nastavení box-sizing vstupů */
+    font-size: 1em; /* Nastavení velikosti písma vstupů */
 }
 
 .modal-save-button {
-    background-color: #007bff;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1.1em;
+    background-color: #007bff; /* Nastavení barvy pozadí tlačítka pro uložení události */
+    color: white; /* Nastavení barvy textu tlačítka pro uložení události */
+    padding: 12px 20px; /* Přidání odsazení tlačítka pro uložení události */
+    border: none; /* Odstranění ohraničení tlačítka pro uložení události */
+    border-radius: 4px; /* Zaoblení rohů tlačítka pro uložení události */
+    cursor: pointer; /* Nastavení kurzoru na ukazatel při najetí na tlačítko */
+    font-size: 1.1em; /* Nastavení velikosti písma tlačítka pro uložení události */
 }
 
 .modal-save-button:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Nastavení barvy pozadí tlačítka pro uložení události při najetí myší */
 }
